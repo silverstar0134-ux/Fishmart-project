@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FishMart | Register</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+/* BACKGROUND */
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#01579b,#0288d1,#4fc3f7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CARD */
+.register-card{
+    width:380px;
+    background:rgba(255,255,255,0.96);
+    padding:30px 24px;
+    border-radius:26px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.3);
+    animation:fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(40px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* LOGO */
+.logo{
+    text-align:center;
+    font-size:48px;
+    animation:float 2.5s infinite ease-in-out;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+h2{
+    text-align:center;
+    color:#01579b;
+    margin-top:8px;
+}
+
+.subtitle{
+    text-align:center;
+    font-size:14px;
+    color:#555;
+    margin-bottom:20px;
+}
+
+/* ROLE SWITCH */
+.role-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.role-box button{
+    flex:1;
+    padding:10px;
+    border-radius:14px;
+    border:1px solid #0288d1;
+    background:white;
+    color:#0288d1;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.role-box button.active{
+    background:linear-gradient(to right,#0288d1,#26c6da);
+    color:white;
+}
+
+/* INPUT */
+.input-group{
+    position:relative;
+    margin-bottom:18px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid #bbb;
+    font-size:15px;
+    outline:none;
+}
+
+.input-group label{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    background:white;
+    padding:0 6px;
+    color:#777;
+    pointer-events:none;
+    transition:0.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label{
+    top:-7px;
+    font-size:12px;
+    color:#0277bd;
+}
+
+/* SELLER EXTRA (LOCATION) */
+.seller-extra{
+    display:none;
+    animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.location-card{
+    background:linear-gradient(135deg,#e1f5fe,#ffffff);
+    padding:16px;
+    border-radius:18px;
+    margin-top:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+.location-card h3{
+    text-align:center;
+    color:#01579b;
+    margin-bottom:12px;
+}
+
+.row{
+    display:flex;
+    gap:10px;
+}
+
+.loc-btn{
+    margin-top:10px;
+    background:linear-gradient(to right,#00796b,#26a69a);
+}
+
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(to right,#0288d1,#26c6da);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* LINKS */
+.links{
+    text-align:center;
+    margin-top:14px;
+    font-size:14px;
+}
+
+.links a{
+    color:#0277bd;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+/* FOOTER */
+.footer{
+    margin-top:14px;
+    text-align:center;
+    font-size:13px;
+    color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="register-card">
+    <div class="logo">🐟</div>
+    <h2>FishMart Register</h2>
+    <div class="subtitle">Create your account</div>
+
+    <!-- ROLE -->
+    <div class="role-box">
+        <button id="customerBtn" class="active" onclick="setRole('Customer')">Customer</button>
+        <button id="sellerBtn" onclick="setRole('Seller')">Seller</button>
+    </div>
+
+    <form method="post">
+               {% csrf_token %}
+        <input type="hidden" name="user_type" id="user_type" value="customer">
+        <input type="hidden" name="role" id="role" value="user">
+
+        <div class="input-group">
+            <input type="text" name="fullname" required placeholder=" ">
+            <label>Full Name</label>
+        </div>
+
+        <div class="input-group">
+            <input type="email" name="emailname" required placeholder=" ">
+            <label>Email </label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="passw" required placeholder=" ">
+            <label>Password</label>
+        </div>
+
+        <div class="input-group">
+            <input type="text" name="mobile" required placeholder=" ">
+            <label>Mobile Number</label>
+        </div>
+
+        <!-- SELLER ONLY -->
+        <div class="seller-extra" id="sellerExtra">
+           <!-- LOCATION -->
+        <div class="location-card">
+            <h3>📍 Fishing Location</h3>
+
+            <div class="input-group">
+                <input type="text" name="area" required placeholder=" ">
+                <label>Area / Harbor</label>
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <input type="text" name="district" required placeholder=" ">
+                    <label>District</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" name="state" value="Tamil Nadu">
+                    <label>State</label>
+                </div>
+            </div>
+
+            <input type="hidden" name="latitude" id="lat">
+            <input type="hidden" name="longitude" id="lng">
+
+            <button type="button" class="btn loc-btn" onclick="getLocation()">
+                📡 Use My Current Location
+            </button>
+        </div>
+        </div>
+
+        <button type="submit" class="btn">Create Account</button>
+
+        <div class="links">
+            Already have an account? <a href="/clogin/" id="loginLink">Login</a>
+        </div>
+
+        <div class="footer">
+            Fresh • Direct • Trusted 🌊
+        </div>
+    </form>
+</div>
+        </div>
+    </form>
+</div>
+
+<script>
+function setRole(role){
+    document.getElementById("role").value = role.toLowerCase();
+
+    // Set user_type based on role
+    if(role === "Customer"){
+        document.getElementById("user_type").value = "customer";
+    }else if(role === "Seller"){
+        document.getElementById("user_type").value = "seller";
+    }
+
+    document.getElementById("customerBtn").classList.remove("active");
+    document.getElementById("sellerBtn").classList.remove("active");
+
+    if(role === "Customer"){
+        document.getElementById("customerBtn").classList.add("active");
+        document.getElementById("sellerExtra").style.display = "none";
+        document.getElementById("loginLink").href = "/clogin/";
+    }else{
+        document.getElementById("sellerBtn").classList.add("active");
+        document.getElementById("sellerExtra").style.display = "block";
+        document.getElementById("loginLink").href = "/sellerlogin_new/";
+    }
+}
+function getLocation(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(position){
+            document.getElementById("lat").value = position.coords.latitude;
+            document.getElementById("lng").value = position.coords.longitude;
+            alert("Location Captured Successfully ✅");
+        });
+    }else{
+        alert("Location not supported ❌");
+    }
+}
+</script>
+
+</body>
+</html>
+

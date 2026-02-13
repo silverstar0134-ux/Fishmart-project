@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FishMart | My Orders</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at 20% 50%, rgba(15, 244, 211, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(30, 144, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #001a4d 0%, #004d7a 25%, #0080b3 50%, #00a3e6 75%, #1a5f7a 100%);
+    background-attachment: fixed;
+    color:#e2e8f0;
+    min-height:100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="%230080b3" opacity="0.3"></path><path d="M0,60 Q300,40 600,60 T1200,60 L1200,120 L0,120 Z" fill="%2300a3e6" opacity="0.5"></path><path d="M0,70 Q300,50 600,70 T1200,70 L1200,120 L0,120 Z" fill="%2315aabf" opacity="0.7"></path></svg>') repeat-x;
+    background-size: 600px 120px;
+    animation: wave 15s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes wave {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(600px);
+    }
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    background:linear-gradient(135deg, #001a4d 0%, #003d7a 100%);
+    border-bottom:3px solid #00d4ff;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+    position: relative;
+    z-index: 10;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.header-right{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.back-button{
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:#000;
+    border:none;
+    padding:8px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+    text-decoration:none;
+    display:inline-block;
+}
+
+.back-button:hover {
+    background:linear-gradient(135deg, #00d4ff, #00ffff);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5);
+}
+
+.logout{
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:#000;
+    border:none;
+    padding:8px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.logout:hover {
+    background:linear-gradient(135deg, #00d4ff, #00ffff);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5);
+}
+
+/* MESSAGES */
+.messages{
+    padding:20px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.alert{
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:10px;
+    border-left:4px solid;
+}
+
+.alert-success{
+    background:linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(0, 212, 255, 0.2));
+    color:#00ffff;
+    border-color:#00d4ff;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.alert-error{
+    background:linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 82, 82, 0.2));
+    color:#ff8787;
+    border-color:#ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+/* MAIN CONTAINER */
+.container{
+    padding:40px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.page-title{
+    font-size:32px;
+    font-weight:bold;
+    color:#00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    margin-bottom:30px;
+}
+
+/* ORDERS SECTION */
+.orders-section{
+    background:rgba(0, 51, 102, 0.6);
+    padding:30px;
+    border-radius:15px;
+    border:2px solid #00d4ff;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.orders-section h2{
+    color:#00ffff;
+    margin-bottom:25px;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.order-stats{
+    margin-bottom:25px;
+}
+
+.order-stats span{
+    background:#0ea5e9;
+    color:white;
+    padding:8px 12px;
+    border-radius:6px;
+    font-size:13px;
+    display:inline-block;
+}
+
+/* ORDER CARD */
+.order-card{
+    background:rgba(15, 23, 42, 0.8);
+    border:1px solid #0ea5e9;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:20px;
+    transition:0.3s;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.1);
+}
+
+.order-card:hover{
+    background:rgba(15, 23, 42, 0.95);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
+    border-color:#00ffff;
+}
+
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px;
+    padding-bottom:15px;
+    border-bottom:1px solid #0ea5e9;
+}
+
+.order-id{
+    font-size:18px;
+    font-weight:bold;
+    color:#00ffff;
+}
+
+.order-details{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:15px;
+}
+
+@media (max-width:768px){
+    .order-details{
+        grid-template-columns: 1fr;
+    }
+    
+    .order-header{
+        flex-direction:column;
+        gap:15px;
+    }
+}
+
+.order-detail{
+    background:rgba(0, 80, 130, 0.5);
+    padding:12px;
+    border-radius:6px;
+    border-left:3px solid #0ea5e9;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.order-detail strong{
+    color:#00ffff;
+}
+
+/* STATUS BADGES */
+.status-badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.status-pending{
+    background:#f59e0b;
+    color:#1f2937;
+}
+
+.status-accepted{
+    background:#3b82f6;
+    color:white;
+}
+
+.status-rejected{
+    background:#ef4444;
+    color:white;
+}
+
+.status-delivered{
+    background:#10b981;
+    color:white;
+}
+
+/* BUTTONS */
+.confirm-button{
+    display:inline-block;
+    padding:10px 20px;
+    background:linear-gradient(135deg,#10b981,#059669);
+    color:white;
+    border:none;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+    cursor:pointer;
+    margin-top:15px;
+}
+
+.confirm-button:hover{
+    background:linear-gradient(135deg,#059669,#047857);
+}
+
+/* NO ORDERS */
+.no-orders{
+    text-align:center;
+    padding:60px 20px;
+    color:#94a3b8;
+}
+
+.no-orders-icon{
+    font-size:64px;
+    margin-bottom:20px;
+}
+
+.no-orders p{
+    margin:10px 0;
+}
+
+.no-orders-subtitle{
+    font-size:14px;
+    margin-top:15px;
+}
+
+.return-home{
+    display:inline-block;
+    margin-top:20px;
+    padding:10px 20px;
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:white;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.return-home:hover{
+    background:linear-gradient(135deg, #00d4ff, #00ffff);
+}
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">🐠 FishMart</div>
+    <div class="header-right">
+        <a href="/cdashboard/" class="back-button">← Back to Dashboard</a>
+        <form action="/logout/" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout">🚪 Logout</button>
+        </form>
+    </div>
+</div>
+
+<!-- MESSAGES -->
+<div class="messages">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <div class="page-title">📦 My Orders</div>
+
+    <!-- ORDERS SECTION -->
+    {% if customer_orders %}
+    <div class="orders-section">
+        <div class="order-stats">
+            <span>Total Orders: <strong>{{ customer_orders.count }}</strong></span>
+        </div>
+        
+        {% for order in customer_orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">Order #{{ order.id }}</div>
+                    <div style="color:#94a3b8;font-size:13px;margin-top:4px;">{{ order.fish.name }}</div>
+                </div>
+                <div style="text-align:right;">
+                    {% if order.status == 'pending' %}
+                        <span class="status-badge status-pending">🔄 PENDING</span>
+                        <div style="font-size:11px;color:#f59e0b;margin-top:6px;">Waiting for seller response</div>
+                    {% elif order.status == 'accepted' %}
+                        <span class="status-badge status-accepted">✅ ACCEPTED</span>
+                        <div style="font-size:11px;color:#3b82f6;margin-top:6px;">Seller confirmed your order</div>
+                    {% elif order.status == 'rejected' %}
+                        <span class="status-badge status-rejected">❌ REJECTED</span>
+                        <div style="font-size:11px;color:#ef4444;margin-top:6px;">Seller rejected your order</div>
+                    {% elif order.status == 'delivered' %}
+                        <span class="status-badge status-delivered">📦 DELIVERED</span>
+                        <div style="font-size:11px;color:#10b981;margin-top:6px;">Successfully delivered</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="order-details">
+                <div class="order-detail">
+                    <strong>📍 Seller Location:</strong> {{ order.seller.area }}, {{ order.seller.district }}, {{ order.seller.state }}
+                </div>
+                <div class="order-detail">
+                    <strong>📊 Quantity:</strong> {{ order.quantity_kg }} KG
+                </div>
+                <div class="order-detail">
+                    <strong>💰 Total Amount:</strong> ₹ {{ order.total_price }}
+                </div>
+                <div class="order-detail">
+                    <strong>📅 Ordered on:</strong> {{ order.created_at|date:"d-m-Y H:i" }}
+                </div>
+                {% if order.status == 'delivered' %}
+                <div class="order-detail" style="background:#d1fae5;padding:8px;border-radius:6px;border-left:3px solid #10b981;">
+                    <strong style="color:#065f46;">✓ Delivered on:</strong> <span style="color:#065f46;">{{ order.updated_at|date:"d-m-Y H:i" }}</span>
+                </div>
+                {% elif order.status == 'rejected' %}
+                <div class="order-detail" style="background:#fecaca;padding:8px;border-radius:6px;border-left:3px solid #ef4444;">
+                    <strong style="color:#7f1d1d;">✗ Rejected on:</strong> <span style="color:#7f1d1d;">{{ order.updated_at|date:"d-m-Y H:i" }}</span>
+                </div>
+                {% elif order.status == 'accepted' %}
+                <div style="margin-top:15px;">
+                    <a href="/order/confirm/{{ order.id }}/" class="confirm-button" onclick="return confirm('Confirm that you have received this order?');">
+                        ✓ Confirm Receipt
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="orders-section">
+        <div class="no-orders">
+            <div class="no-orders-icon">📭</div>
+            <p style="font-size:18px;font-weight:bold;">No orders yet</p>
+            <p class="no-orders-subtitle">Place your first order to track it here!</p>
+            <a href="/cdashboard/" class="return-home">← Return to Dashboard</a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

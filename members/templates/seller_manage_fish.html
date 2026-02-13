@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Fish - FishMart Seller</title>
+    <style>
+      *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* 🌊 BACKGROUND */
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    min-height:100vh;
+    padding:20px;
+    background:
+        radial-gradient(circle at top right,#4fc3f7,transparent 45%),
+        radial-gradient(circle at bottom left,#81d4fa,transparent 45%),
+        linear-gradient(135deg,#01579b,#0288d1,#4fc3f7);
+}
+
+/* CONTAINER */
+.container{
+    max-width:1100px;
+    margin:0 auto;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#0288d1,#26c6da);
+    color:white;
+    padding:26px;
+    border-radius:18px;
+    margin-bottom:30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 15px 40px rgba(0,100,160,.4);
+}
+
+.header h1{
+    font-size:26px;
+    letter-spacing:.4px;
+}
+
+/* ADD BUTTON */
+.btn-add{
+    background:white;
+    color:#0288d1;
+    padding:12px 26px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:600;
+    transition:.35s;
+    box-shadow:0 6px 18px rgba(0,0,0,.2);
+}
+
+.btn-add:hover{
+    transform:translateY(-3px);
+    background:#e1f5fe;
+}
+
+/* GRID */
+.fish-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:22px;
+}
+
+/* CARD */
+.fish-card{
+    background:rgba(255,255,255,.97);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    transition:.35s;
+}
+
+.fish-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 20px 45px rgba(0,0,0,.25);
+}
+
+/* IMAGE */
+.fish-image{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    background:#e1f5fe;
+}
+
+/* INFO */
+.fish-info{
+    padding:18px;
+}
+
+.fish-name{
+    font-size:18px;
+    font-weight:700;
+    color:#01579b;
+    margin-bottom:6px;
+}
+
+.fish-price{
+    font-size:22px;
+    color:#0288d1;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.fish-stock{
+    color:#555;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+/* STATUS */
+.fish-status{
+    display:inline-block;
+    padding:5px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.status-active{
+    background:#e0f7fa;
+    color:#006064;
+}
+
+.status-inactive{
+    background:#ffebee;
+    color:#b71c1c;
+}
+
+/* ACTIONS */
+.fish-actions{
+    display:flex;
+    gap:10px;
+    padding-top:14px;
+    border-top:1px solid #e0f2f1;
+}
+
+/* BUTTON SMALL */
+.btn-sm{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:25px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.35s;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+}
+
+/* EDIT */
+.btn-edit{
+    background:linear-gradient(135deg,#0288d1,#26c6da);
+    color:white;
+    box-shadow:0 5px 15px rgba(0,150,200,.4);
+}
+
+.btn-edit:hover{
+    transform:translateY(-2px);
+}
+
+/* DELETE */
+.btn-delete{
+    background:linear-gradient(135deg,#e53935,#c62828);
+    color:white;
+    box-shadow:0 5px 15px rgba(200,0,0,.4);
+}
+
+.btn-delete:hover{
+    transform:translateY(-2px);
+}
+
+/* EMPTY STATE */
+.empty-state{
+    text-align:center;
+    padding:70px 20px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+
+.empty-state h2{
+    color:#0288d1;
+    margin-bottom:15px;
+}
+
+.empty-state p{
+    color:#777;
+}
+
+/* MESSAGE */
+.message{
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.success-message{
+    background:#e8f5e9;
+    color:#1b5e20;
+    border-left:5px solid #43a047;
+}
+
+.error-message{
+    background:#ffebee;
+    color:#b71c1c;
+    border-left:5px solid #e53935;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .header{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+    .fish-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐟 Manage Fish Products</h1>
+            <a href="/seller/add-fish/" class="btn-add">➕ Add New Fish</a>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% else %}success{% endif %}-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if fish_products %}
+            <div class="fish-grid">
+                {% for fish in fish_products %}
+                <div class="fish-card">
+                    <img src="{{ fish.image.url }}" alt="{{ fish.name }}" class="fish-image">
+                    <div class="fish-info">
+                        <div class="fish-name">{{ fish.name }}</div>
+                        <div class="fish-price">₹{{ fish.price }}/kg</div>
+                        <div class="fish-stock">📦 {{ fish.available_kg }} kg available</div>
+                        <span class="fish-status {% if fish.is_active %}status-active{% else %}status-inactive{% endif %}">
+                            {% if fish.is_active %}✓ Active{% else %}✗ Inactive{% endif %}
+                        </span>
+                        {% if fish.description %}
+                            <p style="font-size: 13px; color: #666; margin-top: 8px;">{{ fish.description|truncatewords:15 }}</p>
+                        {% endif %}
+                        <div class="fish-actions">
+                            <a href="/seller/edit-fish/{{ fish.id }}/" class="btn-sm btn-edit">✏️ Edit</a>
+                            <a href="/seller/delete-fish/{{ fish.id }}/" class="btn-sm btn-delete" onclick="return confirm('Delete this product?')">🗑️ Delete</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size: 60px; margin-bottom: 20px;">🐟</div>
+                <h2>No Fish Products Yet</h2>
+                <p>Start by adding your first fish product to the marketplace</p>
+                <a href="/seller/add-fish/" class="btn-add" style="display: inline-block;">➕ Add Your First Fish</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

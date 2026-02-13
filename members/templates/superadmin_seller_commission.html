@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Commission & Sales - SuperAdmin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #764ba2;
+        }
+        
+        /* SUMMARY CARDS */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .summary-card .currency {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        /* SELLERS TABLE */
+        .sellers-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: #f5f5f5;
+            padding: 15px 20px;
+            border-bottom: 2px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h2 {
+            color: #333;
+            font-size: 18px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f9f9f9;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .seller-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .amount {
+            font-weight: 600;
+            color: #10b981;
+        }
+        
+        .commission {
+            font-weight: 600;
+            color: #ef4444;
+        }
+        
+        .seller-amount {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-accepted {
+            background: #bfdbfe;
+            color: #1e40af;
+        }
+        
+        .badge-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-rejected {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+        
+        .orders-breakdown {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .order-count {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state div:first-child {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .percentage {
+            font-size: 12px;
+            color: #999;
+            margin-top: 3px;
+        }
+        
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 12px;
+            }
+            
+            .orders-breakdown {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>💰 Seller Sales & Commission Tracking</h1>
+            <p>Monitor seller performance and platform commission (5% per order)</p>
+            <a href="/superadmin/dashboard/" class="back-btn">← Back to Dashboard</a>
+        </div>
+        
+        <!-- SUMMARY CARDS -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Total Sales</h3>
+                <div class="value">₹ {{ total_sales|floatformat:2 }}</div>
+                <div class="currency">All sellers combined</div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Platform Commission (5%)</h3>
+                <div class="value" style="color: #ef4444;">₹ {{ total_commission|floatformat:2 }}</div>
+                <div class="currency">Platform revenue</div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Seller Payout Total</h3>
+                <div class="value" style="color: #10b981;">₹ {{ total_seller_amount|floatformat:2 }}</div>
+                <div class="currency">After 5% deduction</div>
+            </div>
+            
+            <div class="summary-card">
+                <h3>Total Sellers</h3>
+                <div class="value">{{ seller_stats|length }}</div>
+                <div class="currency">With active sales</div>
+            </div>
+        </div>
+        
+        <!-- SELLERS TABLE -->
+        <div class="sellers-table">
+            <div class="table-header">
+                <h2>🐟 Seller Performance & Commissions</h2>
+            </div>
+            
+            {% if seller_stats %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Seller Username</th>
+                            <th>Total Sales</th>
+                            <th>5% Commission</th>
+                            <th>Seller Receives</th>
+                            <th>Commission %</th>
+                            <th>Orders Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in seller_stats %}
+                        <tr>
+                            <td>
+                                <div class="seller-name">{{ stat.seller.username }}</div>
+                                <div style="font-size: 12px; color: #999; margin-top: 4px;">
+                                    📍 {{ stat.seller.area }}, {{ stat.seller.district }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="amount">₹ {{ stat.total_sales|floatformat:2 }}</div>
+                            </td>
+                            <td>
+                                <div class="commission">₹ {{ stat.commission_5_percent|floatformat:2 }}</div>
+                            </td>
+                            <td>
+                                <div class="seller-amount">₹ {{ stat.seller_amount|floatformat:2 }}</div>
+                            </td>
+                            <td>
+                                <div>5.00%</div>
+                                <div class="percentage">Fixed rate</div>
+                            </td>
+                            <td>
+                                <div class="orders-breakdown">
+                                    <span class="order-count badge-pending">
+                                        🔄 {{ stat.pending_orders }} Pending
+                                    </span>
+                                    <span class="order-count badge-accepted">
+                                        ✅ {{ stat.accepted_orders }} Accepted
+                                    </span>
+                                    <span class="order-count badge-delivered">
+                                        📦 {{ stat.delivered_orders }} Delivered
+                                    </span>
+                                    {% if stat.rejected_orders > 0 %}
+                                    <span class="order-count badge-rejected">
+                                        ❌ {{ stat.rejected_orders }} Rejected
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div>📊</div>
+                    <p>No seller sales data yet</p>
+                    <p style="font-size: 13px; margin-top: 10px; color: #ccc;">Sales data will appear here once sellers make orders</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

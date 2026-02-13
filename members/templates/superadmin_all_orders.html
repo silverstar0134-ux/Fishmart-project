@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders - SuperAdmin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+
+    /* SEA THEME */
+    background:
+        radial-gradient(circle at top, #e0f7fa 0%, transparent 45%),
+        linear-gradient(
+            135deg,
+            #01579b 0%,
+            #0288d1 40%,
+            #4fc3f7 70%,
+            #b3e5fc 100%
+        );
+
+    background-attachment: fixed;
+}
+
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #764ba2;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .filter-group button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .filter-group button:hover {
+            background: #764ba2;
+        }
+        
+        .orders-table {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+        
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .fish-img-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .fish-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .fish-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .fish-name {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .fish-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-accepted {
+            background: #bfdbfe;
+            color: #1e40af;
+        }
+        
+        .badge-rejected {
+            background: #fecaca;
+            color: #7f1d1d;
+        }
+        
+        .badge-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state div:first-child {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        /* FLIPCARD STYLES */
+        .status-flipcard-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .status-step {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .status-flipcard {
+            perspective: 1000px;
+            width: 80px;
+            height: 80px;
+        }
+
+        .flipcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .status-step:hover .flipcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flipcard-front, .flipcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            border: 2px solid #ddd;
+        }
+
+        .flipcard-back {
+            transform: rotateY(180deg);
+            font-size: 11px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        /* Status Colors */
+        .status-confirmed {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+        }
+
+        .status-placed {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-color: #f5576c;
+        }
+
+        .status-shipped {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #4facfe;
+        }
+
+        .status-delivery {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            border-color: #43e97b;
+        }
+
+        .status-delivered {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border-color: #fa709a;
+        }
+
+        .status-inactive {
+            background: linear-gradient(135deg, #a8a8a8 0%, #808080 100%);
+            border-color: #808080;
+            opacity: 0.6;
+        }
+
+        .status-step-label {
+            font-size: 9px;
+            color: #666;
+            margin-top: 5px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 70px;
+        }
+
+        @media(max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            table {
+                font-size: 13px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .fish-img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .status-flipcard {
+                width: 60px;
+                height: 60px;
+            }
+
+            .flipcard-front, .flipcard-back {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 All Orders</h1>
+            <p>View and manage all orders in the system</p>
+            <a href="/superadmin/dashboard/" class="back-btn">← Back to Dashboard</a>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <div class="number">{{ stats.total_orders }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <div class="number">{{ stats.pending }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Accepted</h3>
+                <div class="number">{{ stats.accepted }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Rejected</h3>
+                <div class="number">{{ stats.rejected }}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Delivered</h3>
+                <div class="number">{{ stats.delivered }}</div>
+            </div>
+        </div>
+        
+        <div class="filters">
+            <form method="get" class="filter-group">
+                <input type="text" name="order_id" placeholder="Search by Order ID..." value="{{ order_id_search }}" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px; width: 200px;">
+                <select name="status">
+                    <option value="">All Status</option>
+                    <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="accepted" {% if current_status == 'accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="rejected" {% if current_status == 'rejected' %}selected{% endif %}>Rejected</option>
+                    <option value="delivered" {% if current_status == 'delivered' %}selected{% endif %}>Delivered</option>
+                </select>
+                <button type="submit">🔍 Search / Filter</button>
+                <a href="/superadmin/all-orders/" style="padding: 10px 20px; background: #666; color: white; text-decoration: none; border-radius: 5px; display: inline-block;">Clear</a>
+            </form>
+        </div>
+        
+        <div class="orders-table">
+            {% if orders %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Fish Product</th>
+                            <th>Seller</th>
+                            <th>Seller Location</th>
+                            <th>Customer</th>
+                            <th>Quantity (KG)</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td><strong>#{{ order.id }}</strong></td>
+                            <td>
+                                <div class="fish-img-cell">
+                                    {% if order.fish.image %}
+                                    <img src="{{ order.fish.image.url }}" alt="{{ order.fish.name }}" class="fish-img">
+                                    {% else %}
+                                    <div style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🐟</div>
+                                    {% endif %}
+                                    <div class="fish-info">
+                                        <div class="fish-name">{{ order.fish.name }}</div>
+                                        <div class="fish-desc">₹{{ order.fish.price }}/kg</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ order.seller.username }}</td>
+                            <td>
+                                <div style="font-size:12px;">
+                                    📍 {{ order.seller.area }}<br>
+                                    {{ order.seller.district }}, {{ order.seller.state }}
+                                </div>
+                            </td>
+                            <td>{{ order.customer_name|default:"Guest" }}</td>
+                            <td>{{ order.quantity_kg }} KG</td>
+                            <td><strong>₹ {{ order.total_price }}</strong></td>
+                            <td>
+                                <div class="status-flipcard-container">
+                                    <!-- Order Confirmed -->
+                                    <div class="status-step">
+                                        <div class="status-flipcard">
+                                            <div class="flipcard-inner">
+                                                <div class="flipcard-front status-confirmed">✓</div>
+                                                <div class="flipcard-back status-confirmed">CONFIRMED</div>
+                                            </div>
+                                        </div>
+                                        <div class="status-step-label">Confirmed</div>
+                                    </div>
+
+                                    <!-- Order Placed -->
+                                    <div class="status-step">
+                                        <div class="status-flipcard {% if order.status == 'pending' %}status-inactive{% else %}status-placed{% endif %}">
+                                            <div class="flipcard-inner">
+                                                <div class="flipcard-front {% if order.status == 'pending' %}status-inactive{% else %}status-placed{% endif %}">📦</div>
+                                                <div class="flipcard-back {% if order.status == 'pending' %}status-inactive{% else %}status-placed{% endif %}">PLACED</div>
+                                            </div>
+                                        </div>
+                                        <div class="status-step-label">Placed</div>
+                                    </div>
+
+                                    <!-- Shipped -->
+                                    <div class="status-step">
+                                        <div class="status-flipcard {% if order.status == 'pending' or order.status == 'accepted' %}status-inactive{% else %}status-shipped{% endif %}">
+                                            <div class="flipcard-inner">
+                                                <div class="flipcard-front {% if order.status == 'pending' or order.status == 'accepted' %}status-inactive{% else %}status-shipped{% endif %}">🚚</div>
+                                                <div class="flipcard-back {% if order.status == 'pending' or order.status == 'accepted' %}status-inactive{% else %}status-shipped{% endif %}">SHIPPED</div>
+                                            </div>
+                                        </div>
+                                        <div class="status-step-label">Shipped</div>
+                                    </div>
+
+                                    <!-- Out for Delivery -->
+                                    <div class="status-step">
+                                        <div class="status-flipcard {% if order.status != 'delivered' %}status-inactive{% else %}status-delivery{% endif %}">
+                                            <div class="flipcard-inner">
+                                                <div class="flipcard-front {% if order.status != 'delivered' %}status-inactive{% else %}status-delivery{% endif %}">🚁</div>
+                                                <div class="flipcard-back {% if order.status != 'delivered' %}status-inactive{% else %}status-delivery{% endif %}">OUT FOR DELIVERY</div>
+                                            </div>
+                                        </div>
+                                        <div class="status-step-label">Out For Delivery</div>
+                                    </div>
+
+                                    <!-- Delivered -->
+                                    <div class="status-step">
+                                        <div class="status-flipcard {% if order.status == 'delivered' %}status-delivered{% else %}status-inactive{% endif %}">
+                                            <div class="flipcard-inner">
+                                                <div class="flipcard-front {% if order.status == 'delivered' %}status-delivered{% else %}status-inactive{% endif %}">✅</div>
+                                                <div class="flipcard-back {% if order.status == 'delivered' %}status-delivered{% else %}status-inactive{% endif %}">DELIVERED</div>
+                                            </div>
+                                        </div>
+                                        <div class="status-step-label">Delivered</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>{{ order.created_at|date:"d-m-Y H:i" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div>📭</div>
+                    <p>No orders found</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

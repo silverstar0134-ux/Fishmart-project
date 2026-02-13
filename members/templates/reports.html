@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About Us | Online Fish Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#021B79,#0575E6);
+    color:#fff;
+}
+
+/* MAIN SECTION */
+.about-section{
+    max-width:1100px;
+    margin:80px auto;
+    padding:40px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* LEFT CONTENT */
+.about-content h1{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.about-content h1 span{
+    color:#00f2fe;
+}
+
+.about-content p{
+    line-height:1.7;
+    color:#e0e0e0;
+    margin-bottom:15px;
+}
+
+/* FORM */
+.about-form{
+    background:rgba(0,0,0,0.4);
+    padding:30px;
+    border-radius:15px;
+}
+
+.about-form h2{
+    margin-bottom:20px;
+    font-size:22px;
+}
+
+.about-form input,
+.about-form textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:10px;
+    outline:none;
+    background:rgba(255,255,255,0.1);
+    color:#fff;
+}
+
+.about-form textarea{
+    height:120px;
+    resize:none;
+}
+
+.about-form button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(45deg,#00f2fe,#4facfe);
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.about-form button:hover{
+    transform:scale(1.05);
+    box-shadow:0 5px 20px rgba(0,242,254,0.6);
+}
+
+/* SUCCESS MESSAGE */
+.success-message{
+    background:#d1fae5;
+    color:#065f46;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .about-section{
+        grid-template-columns:1fr;
+        padding:25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="about-section">
+
+    <!-- LEFT CONTENT -->
+    <div class="about-content">
+        <h1>About <span>Our Fish Market</span></h1>
+        <p>
+            We provide only fresh and high-quality seafood directly from the ocean to your home.
+            Our mission is to deliver hygienic and premium fish at affordable prices.
+        </p>
+        <p>
+            Every day fresh catch, cleaned and packed with care.
+            100% Freshness Guaranteed 🐟
+        </p>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="about-form">
+        <h2>Send Us a Message</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="success-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+</section>
+
+</body>
+</html>
+
+

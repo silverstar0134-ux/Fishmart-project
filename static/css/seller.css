@@ -1,0 +1,94 @@
+/* Shared seller theme - colorful and consistent */
+:root{
+  --primary-1: #667eea;
+  --primary-2: #764ba2;
+  --accent: #26c6da;
+  --success: #4caf50;
+  --danger: #e74c3c;
+  --muted: #666;
+  --card-bg: #ffffff;
+  --page-bg: linear-gradient(180deg,#f2f8ff 0%, #f7fbff 100%);
+  --glass: rgba(255,255,255,0.6);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--page-bg);
+  color: #113;
+  -webkit-font-smoothing:antialiased;
+}
+
+.container{max-width:1200px;margin:30px auto;padding:20px}
+
+/* Header */
+.header{
+  background: linear-gradient(135deg,var(--primary-1) 0%, var(--primary-2) 100%);
+  color: #fff;padding:28px;border-radius:12px;margin-bottom:26px;box-shadow:0 8px 30px rgba(40,40,90,0.08)
+}
+.header h1{font-size:26px;margin-bottom:6px}
+.header p{opacity:.95}
+
+.nav-buttons{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.btn{padding:10px 18px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:700;cursor:pointer;border:0}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#00bcd4);color:#fff}
+.btn-outline{background:transparent;border:2px solid rgba(255,255,255,0.14);color:#fff}
+.btn:hover{transform:translateY(-3px)}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px;margin-bottom:26px}
+.stat-card{background:var(--card-bg);padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(18,32,84,0.04);border-left:6px solid var(--primary-1)}
+.stat-card h3{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.stat-card .number{font-size:24px;font-weight:800;color:#233}
+
+/* Sections */
+.section{background:var(--card-bg);padding:20px;border-radius:12px;box-shadow:0 6px 20px rgba(18,32,84,0.04);margin-bottom:24px}
+.section h2{margin-bottom:16px}
+
+/* Tables */
+table{width:100%;border-collapse:collapse}
+th, td{padding:12px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
+th{background:#fbfcff;font-weight:700;color:#334}
+tr:hover{background:#fcfdff}
+
+/* Badges */
+.status-badge{display:inline-block;padding:6px 12px;border-radius:20px;font-weight:700}
+.status-pending{background:#fff3cd;color:#856404}
+.status-accepted{background:#d4edda;color:#155724}
+.status-rejected{background:#f8d7da;color:#721c24}
+.status-delivered{background:#cfe2ff;color:#084298}
+
+/* Fish cards */
+.fish-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.fish-card{background:var(--card-bg);border-radius:10px;overflow:hidden;box-shadow:0 6px 18px rgba(20,30,70,0.06)}
+.fish-image{width:100%;height:200px;object-fit:cover;background:#f6f8fb}
+.fish-info{padding:14px}
+.fish-name{font-size:16px;font-weight:800;color:#222}
+.fish-price{font-size:18px;color:var(--accent);font-weight:800}
+.fish-actions{display:flex;gap:8px;margin-top:12px}
+.btn-sm{padding:8px 10px;border-radius:8px;font-weight:700}
+.btn-edit{background:var(--primary-1);color:#fff}
+.btn-delete{background:var(--danger);color:#fff}
+
+/* Forms */
+.form-container{background:var(--card-bg);padding:26px;border-radius:10px;box-shadow:0 10px 40px rgba(20,30,80,0.06)}
+.form-header{background:linear-gradient(90deg,var(--primary-1),var(--primary-2));color:#fff;padding:18px;border-radius:8px;margin:-26px -26px 18px -26px;text-align:center}
+.form-group{margin-bottom:16px}
+label{display:block;margin-bottom:8px;font-weight:700;color:#333}
+input[type=text],input[type=number],input[type=email],select,textarea{width:100%;padding:12px;border:1px solid #e6e9f0;border-radius:8px}
+input:focus,textarea:focus,select:focus{outline:none;box-shadow:0 6px 18px rgba(102,126,234,0.12);border-color:var(--primary-1)}
+.btn-submit{background:linear-gradient(90deg,var(--primary-1),var(--primary-2));color:#fff;padding:12px;border-radius:10px;font-weight:800}
+.btn-cancel{background:#eef3ff;color:#333;padding:12px;border-radius:10px}
+
+/* Utilities */
+.empty-state{text-align:center;padding:40px;border-radius:10px}
+.message{padding:12px;border-radius:8px;margin-bottom:16px}
+.success-message{background:#e8f5e9;border-left:6px solid var(--success);color:#2b5d2b}
+.error-message{background:#fff0f0;border-left:6px solid var(--danger);color:#7a1f1f}
+
+/* Quick actions grid */
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+.action-card{padding:15px;text-align:center;border-radius:10px}
+
+/* Responsive tweaks */
+@media (max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr)}.fish-grid{grid-template-columns:1fr}.nav-buttons{flex-direction:column}}

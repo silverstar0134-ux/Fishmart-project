@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperAdmin Login - FishMart</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+/* 🌊 OCEAN BACKGROUND */
+body{
+    min-height:100vh;
+    background:linear-gradient(to top,#01579b,#0288d1,#4fc3f7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    overflow:hidden;
+}
+
+/* WAVE EFFECT */
+body::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:url("https://i.imgur.com/7bKQX1E.png");
+    background-size:contain;
+    opacity:0.08;
+    animation:waveMove 60s linear infinite;
+}
+
+@keyframes waveMove{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+}
+
+/* CARD */
+.login-container{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.35);
+    overflow:hidden;
+    position:relative;
+    z-index:2;
+}
+
+/* HEADER */
+.login-header{
+    background:linear-gradient(135deg,#0277bd,#26c6da);
+    color:white;
+    padding:30px 20px;
+    text-align:center;
+}
+
+.login-header h1{
+    font-size:26px;
+    margin-bottom:8px;
+}
+
+.login-header p{
+    font-size:14px;
+    opacity:0.9;
+}
+
+/* BODY */
+.login-body{
+    padding:30px;
+}
+
+/* FEATURES */
+.features{
+    background:#f1f8ff;
+    border-left:4px solid #0288d1;
+    padding:14px;
+    border-radius:8px;
+    margin-bottom:20px;
+    font-size:13px;
+    color:#444;
+    line-height:1.6;
+}
+
+/* FORM */
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#333;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+    transition:0.3s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#0288d1;
+    box-shadow:0 0 8px rgba(2,136,209,0.3);
+}
+
+/* REMEMBER */
+.remember-me{
+    display:flex;
+    align-items:center;
+    margin:15px 0;
+    font-size:14px;
+    color:#555;
+}
+
+.remember-me input{
+    margin-right:8px;
+}
+
+/* BUTTON */
+.login-btn{
+    width:100%;
+    padding:13px;
+    background:linear-gradient(to right,#0288d1,#26c6da);
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 28px rgba(0,0,0,0.35);
+}
+
+/* MESSAGES */
+.error-message{
+    background:#ffebee;
+    color:#c62828;
+    padding:12px;
+    border-radius:6px;
+    margin-bottom:18px;
+    border-left:4px solid #c62828;
+}
+
+.success-message{
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:12px;
+    border-radius:6px;
+    margin-bottom:18px;
+    border-left:4px solid #4caf50;
+}
+
+/* FOOTER */
+.login-footer{
+    background:#f5f5f5;
+    padding:16px;
+    text-align:center;
+    font-size:12px;
+    color:#666;
+    border-top:1px solid #ddd;
+}
+
+.login-footer a{
+    color:#0288d1;
+    font-weight:bold;
+    text-decoration:none;
+}
+.login-footer a:hover{
+    text-decoration:underline;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .login-container{border-radius:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-header">
+        <h1>🔐 SuperAdmin</h1>
+        <p>Exclusive Control Panel</p>
+    </div>
+
+    <div class="login-body">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{{ message.tags }}-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="features">
+            <strong>SuperAdmin Privileges:</strong><br>
+            ✓ Full user control<br>
+            ✓ Role & permission management<br>
+            ✓ System analytics<br>
+            ✓ Complete authority
+        </div>
+
+        <form method="POST" action="/superadmin/login/">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="Enter admin email">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Enter secure password">
+            </div>
+
+            <div class="remember-me">
+                <input type="checkbox" name="remember">
+                Remember me
+            </div>
+
+            <button type="submit" class="login-btn">
+                🔓 Login as SuperAdmin
+            </button>
+        </form>
+    </div>
+
+    <div class="login-footer">
+        Not a SuperAdmin? <a href="/">Go Home</a><br>
+        Need help? Contact system admin
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<title>Seller Login | FishMart</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+/* FULL SCREEN */
+body{
+    height:100vh;
+    overflow:hidden;
+}
+
+/* OCEAN BACKGROUND */
+.bg{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:
+        radial-gradient(circle at top, #e0f7fa 12%, transparent 45%),
+        linear-gradient(to top, #003c3c 20%, #006064 45%, #4dd0e1 70%, #e0f7fa 100%);
+    animation:seaGlow 8s infinite alternate;
+    z-index:-2;
+}
+
+/* WATER WAVES */
+.waves{
+    position:absolute;
+    width:200%;
+    height:100%;
+    background:repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.05),
+        rgba(255,255,255,0.05) 12px,
+        transparent 12px,
+        transparent 24px
+    );
+    animation:waveMove 45s linear infinite;
+    z-index:-1;
+}
+
+@keyframes seaGlow{
+    from{filter:brightness(1);}
+    to{filter:brightness(1.12);}
+}
+
+@keyframes waveMove{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+}
+
+/* CENTER */
+.container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.97);
+    width:360px;
+    padding:32px 24px;
+    border-radius:30px;
+    text-align:center;
+    box-shadow:0 25px 45px rgba(0,0,0,0.3);
+    animation:fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(40px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ICON */
+.icon{
+    font-size:52px;
+    animation:float 2.5s infinite ease-in-out;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+}
+
+/* TEXT */
+.card h1{
+    color:#ff7043;
+    margin-top:10px;
+}
+
+.card .tamil{
+    font-size:16px;
+    margin-top:5px;
+    color:#333;
+}
+
+.card .english{
+    font-size:14px;
+    margin-top:4px;
+    color:#666;
+    margin-bottom:26px;
+}
+
+/* INPUTS */
+.input-group{
+    text-align:left;
+    margin-bottom:14px;
+}
+
+.input-group label{
+    font-size:13px;
+    color:#333;
+}
+
+.input-group input{
+    width:100%;
+    padding:12px;
+    margin-top:5px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    outline:none;
+    transition:0.3s;
+}
+
+.input-group input:focus{
+    border-color:#ff7043;
+    box-shadow:0 0 5px rgba(255,112,67,0.5);
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(to right,#ff7043,#ff9800);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+    margin-top:10px;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 14px 28px rgba(0,0,0,0.25);
+}
+
+
+
+/* LINKS */
+.links{
+    margin-top:15px;
+    font-size:14px;
+}
+
+.links a{
+    color:#ff7043;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* FOOTER */
+.footer{
+    margin-top:18px;
+    font-size:13px;
+    color:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="waves"></div>
+
+<div class="container">
+    <div class="card">
+
+        <div class="icon">🎣</div>
+        <h1>Seller Login</h1>
+        <div class="tamil">மீனவர் உள்நுழைவு</div>
+        <div class="english">Fisherman / Seller access</div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="role" id="role" value="user">
+
+            <div class="input-group">
+                <label>Email or Mobile Number</label>
+                <input type="text" name="login_id" placeholder="Enter email or mobile number" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <button class="btn" type="submit">Login</button>
+        </form>
+        <center>
+            <div class="links">
+                New seller?
+                <a href="/">Create account</a>
+            </div>
+
+            <div class="footer">
+                Trusted Fishermen • Fresh Catch  
+                <br>நம்பகமான மீனவர்கள்
+            </div>
+        </center>
+
+    </div>
+</div>
+
+
+
+</body>
+</html>

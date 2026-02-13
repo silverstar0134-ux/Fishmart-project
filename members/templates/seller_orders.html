@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders - FishMart Seller</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+             font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    min-height:100vh;
+    padding:20px;
+    background:
+        radial-gradient(circle at top right,#4fc3f7,transparent 45%),
+        radial-gradient(circle at bottom left,#81d4fa,transparent 45%),
+        linear-gradient(135deg,#01579b,#0288d1,#4fc3f7);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+                background:linear-gradient(135deg,#0288d1,#26c6da);
+                color:white;
+                padding: 25px;
+                border-radius: 10px;
+                margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+             background:white;
+             color:#0288d1;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .orders-section {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-delivered {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-cancelled {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-accept {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #45a049;
+        }
+
+        .btn-reject {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #da190b;
+        }
+
+        .btn-deliver {
+            background: #2196f3;
+            color: white;
+        }
+
+        .btn-deliver:hover {
+            background: #0b7dda;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state h2 {
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #ccc;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #4caf50;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .orders-table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .filter-tabs {
+                margin-top: 15px;
+            }
+        }
+
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 Order Management</h1>
+            <div class="filter-tabs">
+                <a href="/seller/orders/" class="tab-btn {% if not current_status %}active{% endif %}">All Orders</a>
+                <a href="/seller/orders/?status=pending" class="tab-btn {% if current_status == 'pending' %}active{% endif %}">⏳ Pending</a>
+                <a href="/seller/orders/?status=accepted" class="tab-btn {% if current_status == 'accepted' %}active{% endif %}">✅ Accepted</a>
+                <a href="/seller/orders/?status=rejected" class="tab-btn {% if current_status == 'rejected' %}active{% endif %}">❌ Rejected</a>
+                <a href="/seller/orders/?status=delivered" class="tab-btn {% if current_status == 'delivered' %}active{% endif %}">🚚 Delivered</a>
+            </div>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">{{ stats.pending }}</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ stats.accepted }}</div>
+                    <div class="stat-label">Accepted</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ stats.rejected }}</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">{{ stats.delivered }}</div>
+                    <div class="stat-label">Delivered</div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% else %}success{% endif %}-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="orders-section">
+            {% if orders %}
+
+                <!-- Commission summary -->
+                <div style="display:flex; gap:20px; justify-content:flex-end; padding: 12px 20px;">
+                    <div style="background:#fff; padding:8px 12px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+                        <div style="font-size:12px; color:#666;">Total Admin Commission</div>
+                        <div style="font-weight:700; font-size:16px;">₹{{ total_commission|floatformat:2 }}</div>
+                    </div>
+                    <div style="background:#fff; padding:8px 12px; border-radius:6px; box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+                        <div style="font-size:12px; color:#666;">Total Seller Amount</div>
+                        <div style="font-weight:700; font-size:16px;">₹{{ total_seller_amount|floatformat:2 }}</div>
+                    </div>
+                </div>
+
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Fish Product</th>
+                            <th>Customer</th>
+                            <th>Quantity (kg)</th>
+                            <th>Total Price</th>
+                            <th>Admin Commission</th>
+                            <th>Seller Amount</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td class="order-id">#{{ order.id }}</td>
+                            <td>{{ order.fish.name }}</td>
+                            <td>
+                                <strong>{{ order.customer_name|default:"N/A" }}</strong><br>
+                                <span style="font-size: 11px; color: #999;">{{ order.customer_phone|default:"" }}</span>
+                            </td>
+                            <td>{{ order.quantity_kg }} kg</td>
+                            <td><strong>₹{{ order.total_price }}</strong></td>
+                            <td>₹{{ order.commission_5_percent|default:0|floatformat:2 }}</td>
+                            <td>₹{{ order.seller_amount|default:order.get_seller_amount|floatformat:2 }}</td>
+                            <td>
+                                <span class="status-badge status-{{ order.status }}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    {% if order.status == 'pending' %}
+                                        <a href="/seller/order/{{ order.id }}/accept/" class="btn-action btn-accept">✅ Accept</a>
+                                        <a href="/seller/order/{{ order.id }}/reject/" class="btn-action btn-reject">❌ Reject</a>
+                                    {% elif order.status == 'accepted' %}
+                                        <a href="/seller/order/{{ order.id }}/deliver/" class="btn-action btn-deliver">🚚 Deliver</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div style="font-size: 60px; margin-bottom: 20px;">📭</div>
+                    <h2>No Orders {% if current_status %} with status "{{ current_status }}"{% endif %}</h2>
+                    <p>Orders will appear here when customers place them</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="/seller/dashboard/" style="color: #667eea; text-decoration: none; font-weight: 600;">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

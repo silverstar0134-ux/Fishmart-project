@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Fish Product - FishMart Seller</title>
+    <style>
+       *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* 🌊 SEA BACKGROUND */
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    min-height:100vh;
+    padding:20px;
+    background:
+        radial-gradient(circle at top right,#4fc3f7,transparent 45%),
+        radial-gradient(circle at bottom left,#81d4fa,transparent 45%),
+        linear-gradient(135deg,#01579b,#0288d1,#4fc3f7);
+}
+
+/* CONTAINER */
+.container{
+    max-width:600px;
+    margin:0 auto;
+}
+
+/* FORM CARD */
+.form-container{
+    background:rgba(255,255,255,0.97);
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 20px 50px rgba(0,70,120,.35);
+    backdrop-filter:blur(6px);
+}
+
+/* HEADER */
+.form-header{
+    background:linear-gradient(135deg,#0288d1,#26c6da);
+    color:white;
+    padding:22px;
+    margin:-30px -30px 30px -30px;
+    border-radius:18px 18px 0 0;
+    text-align:center;
+}
+
+.form-header h1{
+    font-size:26px;
+    margin-bottom:6px;
+    letter-spacing:.4px;
+}
+
+.form-header p{
+    opacity:.95;
+    font-size:14px;
+}
+
+/* FORM GROUP */
+.form-group{
+    margin-bottom:20px;
+}
+
+/* LABEL */
+label{
+    display:block;
+    margin-bottom:8px;
+    color:#01579b;
+    font-weight:600;
+    font-size:14px;
+}
+
+/* INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea{
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:1.5px solid #b3e5fc;
+    font-size:14px;
+    transition:.3s;
+}
+
+input:focus,
+textarea:focus{
+    outline:none;
+    border-color:#0288d1;
+    box-shadow:0 0 0 3px rgba(2,136,209,.25);
+}
+
+/* TEXTAREA */
+textarea{
+    resize:vertical;
+    min-height:100px;
+}
+
+/* GRID */
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+/* REQUIRED */
+.required{
+    color:#e53935;
+}
+
+/* CURRENT IMAGE */
+.current-image{
+    background:#e1f5fe;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.current-image img{
+    max-width:150px;
+    max-height:150px;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,.2);
+}
+
+.current-image p{
+    font-size:12px;
+    color:#0277bd;
+    margin-top:10px;
+}
+
+/* ACTION BUTTONS */
+.form-actions{
+    display:flex;
+    gap:12px;
+    margin-top:30px;
+}
+
+/* BUTTON BASE */
+.btn{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.35s;
+}
+
+/* SUBMIT */
+.btn-submit{
+    background:linear-gradient(135deg,#0288d1,#26c6da);
+    color:white;
+    box-shadow:0 6px 18px rgba(0,150,200,.45);
+}
+
+.btn-submit:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 32px rgba(0,150,200,.6);
+}
+
+/* CANCEL */
+.btn-cancel{
+    background:#e3f2fd;
+    color:#01579b;
+}
+
+.btn-cancel:hover{
+    background:#bbdefb;
+}
+
+/* IMAGE PREVIEW */
+.image-preview{
+    margin-top:15px;
+    text-align:center;
+}
+
+.image-preview img{
+    max-width:100%;
+    max-height:200px;
+    border-radius:12px;
+    box-shadow:0 5px 18px rgba(0,0,0,.25);
+}
+
+/* MESSAGES */
+.message{
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.success-message{
+    background:#e8f5e9;
+    color:#1b5e20;
+    border-left:5px solid #43a047;
+}
+
+.error-message{
+    background:#ffebee;
+    color:#b71c1c;
+    border-left:5px solid #e53935;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .form-row{
+        grid-template-columns:1fr;
+    }
+    .form-actions{
+        flex-direction:column;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>✏️ Edit Fish Product</h1>
+                <p>Update product details</p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {% if message.tags %}{{ message.tags }}{% else %}success{% endif %}-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="name">Fish Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" value="{{ fish.name }}" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price">Price per KG (₹) <span class="required">*</span></label>
+                        <input type="number" id="price" name="price" value="{{ fish.price }}" required step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="available_kg">Available KG <span class="required">*</span></label>
+                        <input type="number" id="available_kg" name="available_kg" value="{{ fish.available_kg }}" required step="0.1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description">{{ fish.description }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Current Image</label>
+                    <div class="current-image">
+                        <img src="{{ fish.image.url }}" alt="{{ fish.name }}">
+                        <p>{{ fish.image.name }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Update Image (Optional)</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-submit">💾 Save Changes</button>
+                    <a href="/seller/manage-fish/" class="btn btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const file = this.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

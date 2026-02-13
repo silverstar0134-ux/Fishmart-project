@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Registration - FishMart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            width: 100%;
+            max-width: 550px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .register-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .register-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .register-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .location-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed #667eea;
+        }
+
+        .location-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .get-location-btn {
+            width: 100%;
+            padding: 12px;
+            background: #26c6da;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .get-location-btn:hover {
+            background: #00bcd4;
+        }
+
+        .location-info {
+            background: white;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .location-info p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .location-info strong {
+            color: #333;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #c62828;
+            display: none;
+            font-size: 13px;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4caf50;
+            display: none;
+            font-size: 13px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .register-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                border-radius: 0;
+                max-width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .register-body {
+                padding: 20px;
+            }
+
+            .register-header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>🐟 FishMart Seller</h1>
+            <p>Register Your Selling Business</p>
+        </div>
+
+        <div class="register-body">
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{% if message.tags %}{{ message.tags }}{% else %}error{% endif %}-message show">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" action="/seller/register/" id="sellerForm">
+                {% csrf_token %}
+
+                <!-- Basic Information -->
+                <h3 style="color: #333; margin-bottom: 15px;">📋 Basic Information</h3>
+
+                <div class="form-group">
+                    <label for="fullname">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullname" name="fullname" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="emailname">Email Address <span class="required">*</span></label>
+                        <input type="email" id="emailname" name="emailname" required placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number <span class="required">*</span></label>
+                        <input type="tel" id="mobile" name="mobile" required placeholder="10-digit number">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="passw">Password <span class="required">*</span></label>
+                    <input type="password" id="passw" name="passw" required placeholder="Create a strong password">
+                </div>
+
+                <!-- Location Information -->
+                <h3 style="color: #333; margin-top: 25px; margin-bottom: 15px;">📍 Location Information</h3>
+
+                <div class="location-section">
+                    <h3>Get Your Location</h3>
+                    <button type="button" class="get-location-btn" onclick="getLocation()">
+                        📍 Get Current Location
+                    </button>
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div> Getting your location...
+                    </div>
+                    <div id="locationStatus"></div>
+                    <div id="locationInfo"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="area">Area <span class="required">*</span></label>
+                        <input type="text" id="area" name="area" required placeholder="e.g., Bandra" 
+                               onclick="this.setAttribute('data-required', 'true')">
+                    </div>
+                    <div class="form-group">
+                        <label for="district">District <span class="required">*</span></label>
+                        <input type="text" id="district" name="district" required placeholder="e.g., Mumbai">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State <span class="required">*</span></label>
+                    <select id="state" name="state" required>
+                        <option value="">-- Select State --</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                </div>
+
+                <!-- Hidden fields for coordinates -->
+                <input type="hidden" id="latitude" name="latitude" value="">
+                <input type="hidden" id="longitude" name="longitude" value="">
+
+                <button type="submit" class="register-btn">✅ Register as Seller</button>
+            </form>
+        </div>
+
+        <div class="register-footer">
+            Already registered? <a href="/sellerlogin/">Login here</a> | <a href="/">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function getLocation() {
+            const loading = document.getElementById('loading');
+            const locationStatus = document.getElementById('locationStatus');
+            const locationInfo = document.getElementById('locationInfo');
+
+            loading.classList.add('show');
+            locationStatus.innerHTML = '';
+            locationInfo.innerHTML = '';
+
+            if (!navigator.geolocation) {
+                loading.classList.remove('show');
+                locationStatus.innerHTML = '<div class="error-message show">❌ Geolocation not supported by your browser</div>';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+
+                    loading.classList.remove('show');
+                    locationStatus.innerHTML = '<div class="success-message show">✅ Location detected successfully!</div>';
+                    
+                    const infoHtml = `
+                        <div class="location-info">
+                            <p><strong>Latitude:</strong> ${lat.toFixed(6)}</p>
+                            <p><strong>Longitude:</strong> ${lng.toFixed(6)}</p>
+                            <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                                Now fill in your area, district, and state details below.
+                            </p>
+                        </div>
+                    `;
+                    locationInfo.innerHTML = infoHtml;
+                },
+                function(error) {
+                    loading.classList.remove('show');
+                    let errorMsg = '';
+                    
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg = '❌ Location permission denied. Enable location access in your browser.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg = '❌ Location information is unavailable.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg = '❌ Location request timed out.';
+                            break;
+                        default:
+                            errorMsg = '❌ Unable to get location. Error: ' + error.message;
+                    }
+                    
+                    locationStatus.innerHTML = `<div class="error-message show">${errorMsg}</div>`;
+                }
+            );
+        }
+
+        // Form validation
+        document.getElementById('sellerForm').addEventListener('submit', function(e) {
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
+            
+            if (!lat || !lng) {
+                e.preventDefault();
+                alert('⚠️ Please get your location by clicking "Get Current Location" button before registering.');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

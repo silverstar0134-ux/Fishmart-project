@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FishMart | Online Fish Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+/* HERO NAVIGATION */
+.hero-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+}
+
+.hero-brand{
+    font-size:20px;
+    font-weight:900;
+    color:#0f172a;
+}
+
+.hero-links a{
+    margin-left:20px;
+    text-decoration:none;
+    font-weight:600;
+    color:#334155;
+    position:relative;
+    transition:0.3s;
+}
+
+.hero-links a::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-4px;
+    width:0%;
+    height:2px;
+    background:#22c55e;
+    transition:0.3s;
+}
+
+.hero-links a:hover::after{
+    width:100%;
+}
+
+.hero-links a:hover{
+    color:#22c55e;
+}
+
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at top,#38bdf8 0%,transparent 40%),
+        linear-gradient(to bottom,#0ea5e9,#0369a1,#020617);
+}
+
+/* 🐟 FISH */
+.fish{
+    position:absolute;
+    opacity:0.85;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    z-index:2;
+}
+
+/* SIZES */
+.small{font-size:22px;}
+.medium{font-size:38px;}
+.large{font-size:56px;}
+
+/* DIRECTIONS */
+.forward{
+    left:-150px;
+    animation-name:swimForward;
+}
+.reverse{
+    right:-150px;
+    animation-name:swimReverse;
+    transform:scaleX(-1);
+}
+
+/* ANIMATIONS */
+@keyframes swimForward{
+    from{transform:translateX(-150px) scaleX(-1);}
+    to{transform:translateX(120vw) scaleX(-1);}
+}
+@keyframes swimReverse{
+    from{transform:translateX(120vw);}
+    to{transform:translateX(-150px);}
+}
+
+/* HERO */
+.hero{
+    position:relative;
+    z-index:10;
+    max-width:850px;
+    margin:10vh auto 0;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(15px);
+    padding:60px;
+    border-radius:30px;
+    text-align:center;
+    box-shadow:0 40px 90px rgba(0,0,0,0.45);
+    animation:fadeUp 1.2s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(40px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.logo{
+    font-size:52px;
+    margin-bottom:10px;
+}
+
+.hero h1{
+    font-size:44px;
+    font-weight:900;
+    color:#0f172a;
+}
+
+.hero h1 span{
+    background:linear-gradient(to right,#0ea5e9,#22c55e);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    margin:20px 0 40px;
+    font-size:18px;
+    color:#334155;
+}
+
+/* BUTTONS */
+.buttons{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:16px 38px;
+    border-radius:50px;
+    font-size:16px;
+    font-weight:800;
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
+    box-shadow:0 15px 35px rgba(0,0,0,0.35);
+}
+
+.customer{background:linear-gradient(to right,#22c55e,#16a34a);}
+.seller{background:linear-gradient(to right,#0ea5e9,#2563eb);}
+.admin{background:linear-gradient(to right,#f97316,#ea580c);}
+
+.btn:hover{
+    transform:translateY(-5px) scale(1.05);
+}
+
+/* NAV BUTTON STYLE */
+.nav-btn{
+    display:inline-block;
+    margin-left:15px;
+    padding:10px 22px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:14px;
+    color:#0f172a;
+    background:linear-gradient(to right,#e0f2fe,#bae6fd);
+    transition:all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Hover Lift */
+.nav-btn:hover{
+    transform:translateY(-4px) scale(1.08);
+    background:linear-gradient(to right,#22c55e,#0ea5e9);
+    color:white;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* Click Effect */
+.nav-btn:active{
+    transform:scale(0.95);
+}
+
+/* Shine Effect */
+.nav-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.6),
+        transparent
+    );
+    transition:0.5s;
+}
+
+.nav-btn:hover::before{
+    left:100%;
+}
+
+
+.footer{
+    margin-top:30px;
+    font-size:13px;
+    color:#475569;
+}
+
+/* MOBILE */
+@media(max-width:640px){
+    .hero{
+        padding:40px 25px;
+    }
+    .hero h1{
+        font-size:32px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+
+
+<!-- HERO -->
+<div class="hero">
+
+    <!-- TOP NAV INSIDE BOX -->
+    <div class="hero-nav">
+    <div class="hero-brand">🐟 FishMart</div>
+
+    <div class="hero-links">
+        <a href="/" class="nav-btn">🏠 Home</a>
+        <a href="/about/" class="nav-btn">ℹ️ About</a>
+        <a href="/contact/" class="nav-btn">📞 Contact</a>
+    </div>
+</div>
+
+
+    <div class="logo">🐟</div>
+    <h1>Welcome to <span>FishMart</span></h1>
+    <p>
+        A colorful online fish marketplace where fishermen sell
+        fresh seafood directly to customers with trust and transparency.
+    </p>
+
+    <div class="buttons">
+        <a href="/clogin/" class="btn customer">👤 Customer</a>
+        <a href="/sellerlogin_new/" class="btn seller">🧑‍🌾 Seller</a>
+        <a href="/superadmin/login/" class="btn admin">🔐 Admin</a>
+    </div>
+
+    <div class="footer">
+        © 2026 FishMart • Fresh from Sea to Home 🌊
+    </div>
+
+</div>
+
+
+<!-- 🐟 AUTO FISH SCRIPT -->
+<script>
+const fishIcons = ["🐟","🐠","🐡"];
+const sizes = ["small","medium","large"];
+const directions = ["forward","reverse"];
+
+const FISH_COUNT = 45; // 👉 inga change panna fish count increase/decrease
+
+for(let i=0;i<FISH_COUNT;i++){
+    const fish = document.createElement("div");
+    fish.classList.add("fish");
+
+    fish.textContent = fishIcons[Math.floor(Math.random()*fishIcons.length)];
+    fish.classList.add(sizes[Math.floor(Math.random()*sizes.length)]);
+    fish.classList.add(directions[Math.floor(Math.random()*directions.length)]);
+
+    fish.style.top = Math.random()*90 + "%";
+    fish.style.animationDuration = (12 + Math.random()*25) + "s";
+
+    document.body.appendChild(fish);
+}
+</script>
+
+</body>
+</html>
+

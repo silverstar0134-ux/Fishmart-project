@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Online Fish Market</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
+}
+
+body{
+  background:#0b1120;
+  color:white;
+}
+
+/* ================= HEADER ================= */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 60px;
+  background:#020617;
+}
+
+.logo{
+  font-size:26px;
+  font-weight:bold;
+}
+.logo span{
+  color:#38bdf8;
+}
+
+.header nav a{
+  margin-left:25px;
+  color:#cbd5f5;
+  text-decoration:none;
+}
+
+.header .btn{
+  background:#38bdf8;
+  padding:8px 16px;
+  border-radius:20px;
+  color:#000;
+}
+
+/* ================= HERO ================= */
+.hero{
+  text-align:center;
+  padding:120px 20px;
+  background:linear-gradient(135deg,#020617,#020617,#1e3a8a);
+}
+
+.hero h1{
+  font-size:48px;
+}
+.hero p{
+  margin:15px 0;
+  color:#94a3b8;
+}
+.hero button{
+  padding:12px 25px;
+  border:none;
+  background:#38bdf8;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+/* ================= FEATURES (ANIMATED BUTTONS) ================= */
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  padding:80px;
+}
+
+.fish-btn{
+  position:relative;
+  height:120px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-decoration:none;
+  color:white;
+  font-size:20px;
+  font-weight:600;
+  border-radius:50px;
+  overflow:hidden;
+  transition:0.4s;
+  box-shadow:0 0 25px rgba(56,189,248,0.25);
+}
+
+.fish-btn span{
+  font-size:14px;
+  margin-top:6px;
+  color:#e0f2fe;
+  font-weight:400;
+}
+
+/* Button Colors */
+.sea{
+  background:linear-gradient(135deg,#0ea5e9,#2563eb);
+}
+.river{
+  background:linear-gradient(135deg,#22c55e,#15803d);
+}
+.farm{
+  background:linear-gradient(135deg,#facc15,#ca8a04);
+}
+.coast{
+  background:linear-gradient(135deg,#fb7185,#be123c);
+}
+
+/* Hover animation */
+.fish-btn::before{
+  content:"";
+  position:absolute;
+  width:140%;
+  height:140%;
+  background:radial-gradient(circle,rgba(255,255,255,0.35),transparent 60%);
+  top:-120%;
+  left:-120%;
+  transition:0.6s;
+}
+
+.fish-btn:hover::before{
+  top:0;
+  left:0;
+}
+
+.fish-btn:hover{
+  transform:translateY(-6px) scale(1.05);
+  box-shadow:0 0 45px rgba(56,189,248,0.6);
+}
+
+/* ================= PRICING ================= */
+.pricing{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  padding:80px;
+}
+
+.price-box{
+  background:#020617;
+  padding:40px;
+  width:220px;
+  border-radius:20px;
+  text-align:center;
+}
+
+.price-box.active{
+  border:2px solid #38bdf8;
+}
+
+.price-box button{
+  margin-top:15px;
+  padding:10px 20px;
+  background:#38bdf8;
+  border:none;
+  border-radius:20px;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:30px;
+  padding:50px;
+  background:#020617;
+}
+
+.footer a{
+  display:block;
+  color:#94a3b8;
+  text-decoration:none;
+  margin-top:8px;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">Fresh<span>fish</span></div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Features</a>
+    <a href="#">seller login</a>
+    <a href="#">Contact</a>
+    <a class="btn" href="#">sign up</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Online Fish Market</h1>
+  <p>Fresh Fish Every Day</p>
+  <button>Order Now</button>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <a href="sea-fish.html" class="fish-btn sea">
+    🐟 Sea Fish
+    <span>கடல் மீன்</span>
+  </a>
+
+  <a href="river-fish.html" class="fish-btn river">
+    🐠 River Fish
+    <span>நதி மீன்</span>
+  </a>
+
+  <a href="farm-fish.html" class="fish-btn farm">
+    🐡 Pond / Farm Fish
+    <span>குளம் / பண்ணை மீன்</span>
+  </a>
+
+  <a href="coastal-fish.html" class="fish-btn coast">
+    🦐 Coastal Catch
+    <span>கரையோர மீன்</span>
+  </a>
+</section>
+
+
+
+<!-- FOOTER -->
+<footer class="footer">
+  <center>
+  <div>
+    <h4>Support</h4>
+    <a href="#">Help</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+  </center>
+</footer>
+
+</body>
+</html>

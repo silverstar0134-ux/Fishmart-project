@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Contact | FishMart</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+        radial-gradient(circle at top,#38bdf8 0%,transparent 40%),
+        linear-gradient(to bottom,#0ea5e9,#0369a1,#020617);
+}
+
+/* WHITE GLASS HERO BOX */
+.contact-hero{
+    width:90%;
+    max-width:1000px;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(15px);
+    border-radius:30px;
+    padding:60px;
+    box-shadow:0 40px 90px rgba(0,0,0,0.45);
+    animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(40px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.contact-hero h1{
+    text-align:center;
+    font-size:48px;
+    font-weight:900;
+    letter-spacing:1px;
+    margin-bottom:15px;
+    background:linear-gradient(90deg,#0ea5e9,#22c55e,#0ea5e9);
+    background-size:200% auto;
+    background-clip:text;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent;
+    animation:shineText 4s linear infinite;
+    text-shadow:0 5px 25px rgba(14,165,233,0.4);
+}
+
+/* Gradient Moving Animation */
+@keyframes shineText{
+    to{
+        background-position:200% center;
+    }
+}
+
+.contact-hero p{
+    text-align:center;
+    color:#334155;
+    margin-bottom:40px;
+}
+
+/* GRID */
+.contact-content{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+}
+
+/* LEFT INFO */
+.info-box{
+    margin-bottom:20px;
+}
+
+.info-box h4{
+    color:#0ea5e9;
+    margin-bottom:5px;
+}
+
+.info-box span{
+    color:#475569;
+    font-size:14px;
+}
+
+/* FORM */
+.contact-form input,
+.contact-form textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border-radius:12px;
+    border:1px solid #cbd5e1;
+    outline:none;
+    font-size:14px;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus{
+    border-color:#0ea5e9;
+    box-shadow:0 0 0 3px rgba(14,165,233,0.2);
+}
+
+.contact-form textarea{
+    resize:none;
+    height:120px;
+}
+
+.contact-form button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(to right,#22c55e,#16a34a);
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.contact-form button:hover{
+    transform:scale(1.05);
+    box-shadow:0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+    .contact-content{
+        grid-template-columns:1fr;
+    }
+    .contact-hero{
+        padding:40px 25px;
+    }
+}
+.back-btn{
+    display:inline-block;
+    margin-top:35px;
+    padding:12px 28px;
+    border-radius:30px;
+    background:linear-gradient(to right,#22c55e,#16a34a);
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    transform:scale(1.08);
+}
+
+/* MESSAGE STYLES */
+.message-box {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid;
+}
+
+.message-box.success {
+    background: #dcfce7;
+    border-left-color: #22c55e;
+}
+
+.message-box.success p {
+    color: #166534;
+}
+
+.message-box.error {
+    background: #fee2e2;
+    border-left-color: #dc2626;
+}
+
+.message-box.error p {
+    color: #991b1b;
+}
+
+.message-box p {
+    margin: 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="contact-hero">
+
+    <h1>Contact FishMart 🐟</h1>
+    <p>Only Fresh Fish • Fresh from Sea to Home 🌊</p>
+
+    <div class="contact-content">
+
+        <!-- LEFT INFO -->
+        <div>
+            <div class="info-box">
+                <h4>📍 Address</h4>
+                <span>Chennai Fish Harbour, Tamil Nadu</span>
+            </div>
+
+            <div class="info-box">
+                <h4>📞 Phone</h4>
+                <span>+91 98765 43210</span>
+            </div>
+
+            <div class="info-box">
+                <h4>✉️ Email</h4>
+                <span>support@fishmart.com</span>
+            </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="contact-form">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message-box {% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" name="name" placeholder="Your Name" required value="{{ form.name.value|default:'' }}">
+                {% if form.name.errors %}
+                    <div style="color:#dc2626; font-size:12px; margin-top:-10px; margin-bottom:10px;">{{ form.name.errors.0 }}</div>
+                {% endif %}
+                
+                <input type="email" name="email" placeholder="Your Email" required value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                    <div style="color:#dc2626; font-size:12px; margin-top:-10px; margin-bottom:10px;">{{ form.email.errors.0 }}</div>
+                {% endif %}
+                
+                <textarea name="message" placeholder="Your Message" required>{{ form.message.value|default:'' }}</textarea>
+                {% if form.message.errors %}
+                    <div style="color:#dc2626; font-size:12px; margin-top:-5px; margin-bottom:10px;">{{ form.message.errors.0 }}</div>
+                {% endif %}
+                
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+    <a href="/" class="back-btn">⬅ Back to Home</a>
+</div>
+
+</body>
+</html>
+
+

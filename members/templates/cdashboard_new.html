@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FishMart | Customer Dashboard</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at 20% 50%, rgba(15, 244, 211, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(30, 144, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #001a4d 0%, #004d7a 25%, #0080b3 50%, #00a3e6 75%, #1a5f7a 100%);
+    background-attachment: fixed;
+    color:#e2e8f0;
+    min-height:100vh;
+    position: relative;
+    overflow-x: hidden;
+    margin-left: 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="%230080b3" opacity="0.3"></path><path d="M0,60 Q300,40 600,60 T1200,60 L1200,120 L0,120 Z" fill="%2300a3e6" opacity="0.5"></path><path d="M0,70 Q300,50 600,70 T1200,70 L1200,120 L0,120 Z" fill="%2315aabf" opacity="0.7"></path></svg>') repeat-x;
+    background-size: 600px 120px;
+    animation: wave 15s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes wave {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(600px);
+    }
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    background:linear-gradient(135deg, #001a4d 0%, #003d7a 100%);
+    border-bottom:3px solid #00d4ff;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.3);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.header-right{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.cart-icon{
+    position:relative;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.cart-count{
+    position:absolute;
+    top:-8px;
+    right:-8px;
+    background:#ef4444;
+    color:white;
+    border-radius:50%;
+    width:20px;
+    height:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:12px;
+}
+
+.logout{
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:#000;
+    border:none;
+    padding:8px 16px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:bold;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.logout:hover {
+    background:linear-gradient(135deg, #00d4ff, #00ffff);
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.5);
+}
+
+/* MESSAGES */
+.messages{
+    padding:20px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+.alert{
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:10px;
+    border-left:4px solid;
+}
+
+.alert-success{
+    background:linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(0, 212, 255, 0.2));
+    color:#00ffff;
+    border-color:#00d4ff;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.alert-error{
+    background:linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 82, 82, 0.2));
+    color:#ff8787;
+    border-color:#ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
+}
+
+/* MAIN CONTAINER */
+.container{
+    padding:40px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* FILTER SECTION */
+.filter-section{
+    background:rgba(0, 51, 102, 0.6);
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:40px;
+    border:2px solid #00d4ff;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.filter-section h3{
+    margin-bottom:15px;
+    color:#00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.filter-group{
+    display:flex;
+    gap:15px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.filter-group select,
+.filter-group input{
+    padding:10px 15px;
+    border-radius:8px;
+    border:2px solid #00b4d8;
+    background:rgba(0, 26, 77, 0.8);
+    color:#e2e8f0;
+    outline:none;
+    transition: 0.3s;
+}
+
+.filter-group select:focus,
+.filter-group input:focus{
+    border-color:#00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+.filter-group button{
+    padding:10px 20px;
+    background:linear-gradient(135deg, #0080b3 0%, #00d4ff 100%);
+    color:#000;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.filter-group button:hover{
+    background:linear-gradient(135deg, #00d4ff 0%, #00ffff 100%);
+    transform:scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
+}
+
+/* PRODUCTS GRID */
+.products-section{
+    margin-bottom:50px;
+}
+
+.products-section h2{
+    margin-bottom:25px;
+    color:#00ffff;
+    font-size:28px;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:25px;
+}
+
+.product-card{
+    background:rgba(0, 51, 102, 0.6);
+    border-radius:15px;
+    overflow:hidden;
+    border:2px solid #00b4d8;
+    transition:0.3s;
+    box-shadow:0 10px 30px rgba(0, 180, 216, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.product-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 15px 45px rgba(0, 212, 255, 0.4);
+    border-color:#00ffff;
+}
+
+.product-image{
+    width:100%;
+    height:200px;
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:60px;
+    color:white;
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="white" opacity="0.1"></path></svg>') repeat-x;
+    background-size: 600px 40px;
+    animation: wave 8s linear infinite;
+    z-index: 1;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    position: relative;
+    z-index: 2;
+}
+
+.product-body{
+    padding:20px;
+}
+
+.product-name{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:8px;
+    color:#e0f2fe;
+}
+
+.product-seller{
+    font-size:13px;
+    color:#94a3b8;
+    margin-bottom:12px;
+}
+
+.product-details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+.detail-item{
+    background:rgba(0, 212, 255, 0.1);
+    padding:8px;
+    border-radius:6px;
+    border-left:3px solid #00d4ff;
+}
+
+.detail-label{
+    color:#94a3b8;
+    font-size:12px;
+}
+
+.detail-value{
+    color:#00ffff;
+    font-weight:bold;
+}
+
+.product-footer{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.quantity-input{
+    flex:1;
+    padding:8px;
+    border-radius:6px;
+    border:2px solid #00b4d8;
+    background:rgba(0, 26, 77, 0.8);
+    color:#e2e8f0;
+    text-align:center;
+    transition: 0.3s;
+}
+
+.quantity-input:focus {
+    border-color:#00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.add-btn{
+    flex:1;
+    background:linear-gradient(135deg, #00b4d8, #00ffff);
+    color:#000;
+    border:none;
+    padding:10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.add-btn:hover{
+    background:linear-gradient(135deg, #00ffff, #1af0f0);
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+}
+
+/* CART SECTION */
+.cart-section{
+    background:rgba(0, 51, 102, 0.6);
+    padding:30px;
+    border-radius:15px;
+    border:2px solid #00d4ff;
+    margin-bottom:50px;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.cart-section h2{
+    margin-bottom:20px;
+    color:#00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.cart-empty{
+    text-align:center;
+    padding:40px;
+    color:#94a3b8;
+}
+
+.cart-items{
+    margin-bottom:20px;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    background:rgba(0, 212, 255, 0.1);
+    border-radius:8px;
+    margin-bottom:10px;
+    border-left:3px solid #00d4ff;
+    transition: 0.3s;
+}
+
+.cart-item:hover {
+    background:rgba(0, 212, 255, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+}
+
+.cart-item-info{
+    flex:1;
+}
+
+.cart-item-name{
+    font-weight:bold;
+    color:#e0f2fe;
+    margin-bottom:5px;
+}
+
+.cart-item-details{
+    font-size:13px;
+    color:#94a3b8;
+}
+
+.cart-item-price{
+    font-size:18px;
+    font-weight:bold;
+    color:#00ffff;
+    margin-right:20px;
+}
+
+.cart-item-remove{
+    background:linear-gradient(135deg, #ff6b6b, #ff5252);
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    transition: 0.3s;
+}
+
+.cart-item-remove:hover {
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.cart-summary{
+    background:rgba(0, 212, 255, 0.15);
+    padding:15px;
+    border-radius:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    border:2px solid #00d4ff;
+}
+
+.cart-total{
+    font-size:24px;
+    font-weight:bold;
+    color:#00ffff;
+}
+
+/* ORDER FORM */
+.order-form{
+    background:rgba(0, 51, 102, 0.6);
+    padding:25px;
+    border-radius:12px;
+    border:2px solid #00d4ff;
+    margin-bottom:20px;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.form-row.full{
+    grid-template-columns:1fr;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    margin-bottom:8px;
+    color:#00ffff;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    padding:12px;
+    border-radius:8px;
+    border:2px solid #00b4d8;
+    background:rgba(0, 26, 77, 0.8);
+    color:#e2e8f0;
+    outline:none;
+    transition:0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color:#00ffff;
+    box-shadow:0 0 10px rgba(0, 255, 255, 0.4);
+    background:rgba(0, 51, 102, 0.9);
+}
+
+.form-group textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+.checkout-btn{
+    width:100%;
+    padding:14px;
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:#000;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+}
+
+.checkout-btn:hover{
+    background:linear-gradient(135deg, #00d4ff, #00ffff);
+    transform:scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
+}
+
+.checkout-btn:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+/* ORDERS SECTION */
+.orders-section{
+    background:rgba(0, 51, 102, 0.6);
+    padding:30px;
+    border-radius:15px;
+    border:2px solid #00d4ff;
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.orders-section h2{
+    margin-bottom:20px;
+    color:#00ffff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.order-card{
+    background:rgba(0, 212, 255, 0.08);
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:15px;
+    border-left:4px solid #00d4ff;
+    transition: 0.3s;
+}
+
+.order-card:hover {
+    background:rgba(0, 212, 255, 0.12);
+    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+}
+
+.order-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.order-id{
+    font-weight:bold;
+    color:#e0f2fe;
+}
+
+.status-badge{
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.status-pending{
+    background:linear-gradient(135deg, #ff9800, #f57c00);
+    color:#fff;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.status-accepted{
+    background:linear-gradient(135deg, #0080b3, #00d4ff);
+    color:#fff;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.status-rejected{
+    background:linear-gradient(135deg, #ff6b6b, #ff5252);
+    color:#fff;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+}
+
+.status-delivered{
+    background:linear-gradient(135deg, #00b4d8, #00ffff);
+    color:#000;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.order-details{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:10px;
+    font-size:13px;
+}
+
+.order-detail{
+    color:#94a3b8;
+}
+
+.order-detail strong{
+    color:#e0f2fe;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    .header{
+        padding:15px 20px;
+    }
+    
+    .container{
+        padding:20px;
+    }
+    
+    .products-grid{
+        grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    }
+    
+    .filter-group{
+        flex-direction:column;
+    }
+    
+    .filter-group select,
+    .filter-group input,
+    .filter-group button{
+        width:100%;
+    }
+    
+    .form-row{
+        grid-template-columns:1fr;
+    }
+    
+    .cart-item{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    
+    .cart-item-price{
+        margin-right:0;
+        margin-top:10px;
+    }
+}
+
+/* HEADER STYLES */
+.header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 99;
+}
+
+.messages {
+    margin-top: 70px;
+}
+
+.container {
+    padding: 40px 60px;
+    position: relative;
+    z-index: 2;
+    margin-top: 70px;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="logo">🐟 FishMart</div>
+    <div class="header-right">
+        <a href="/customer/shopping-cart/" style="position:relative;font-size:24px;cursor:pointer;text-decoration:none;color:inherit;">
+            🛒 Cart
+            {% if cart_count > 0 %}
+            <span class="cart-count">{{ cart_count }}</span>
+            {% endif %}
+        </a>
+        <a href="/clogin/" class="logout">Logout</a>
+    </div>
+</header>
+
+<!-- MESSAGES -->
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    
+    <!-- FILTER SECTION -->
+    <div class="filter-section">
+        <h3>🔍 Find Fresh Fish</h3>
+        <form method="get" class="filter-group">
+            <input type="text" name="search" placeholder="🐟 Search fish name..." value="" style="flex: 1; min-width: 250px;">
+            
+            <button type="submit">🔍 Search</button>
+        </form>
+    </div>
+
+    <!-- PRODUCTS SECTION -->
+    {% if fish_products %}
+    <div class="products-section" id="products-section">
+        <h2>🐟 Available Fish Products</h2>
+        <div class="products-grid">
+            {% for fish in fish_products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if fish.image %}
+                    <img src="{{ fish.image.url }}" alt="{{ fish.name }}">
+                    {% else %}
+                    🐟
+                    {% endif %}
+                </div>
+                <div class="product-body">
+                    <div class="product-name">{{ fish.name }}</div>
+                    <div class="product-seller">📍 {{ fish.seller.area }}, {{ fish.seller.district }}</div>
+                    
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Price per KG</div>
+                            <div class="detail-value">₹ {{ fish.price }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Available</div>
+                            <div class="detail-value">{{ fish.available_kg }} KG</div>
+                        </div>
+                    </div>
+
+                    <form method="post" action="/cart/add/{{ fish.id }}/" class="product-footer">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" min="0.5" max="{{ fish.available_kg }}" step="0.5" value="1" class="quantity-input">
+                        <button type="submit" class="add-btn">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="products-section">
+        <h2>📦 No Products Found</h2>
+        <p style="text-align:center;color:#94a3b8;">Try selecting a different location or check back later!</p>
+    </div>
+    {% endif %}
+
+    <!-- CART SECTION -->
+    <div class="cart-section" style="text-align: center;">
+        <h2>🛒 Shopping Cart</h2>
+        <div style="margin-bottom:20px;">
+            <span style="background:#0ea5e9;color:white;padding:8px 12px;border-radius:6px;font-size:13px;">
+                Items in Cart: <strong>{{ cart_count }}</strong>
+            </span>
+        </div>
+        <p style="color:#94a3b8;margin-bottom:20px;">
+            {% if cart %}Cart Total: <strong style="color:#00ffff;">₹ {{ cart_total }}</strong>{% else %}Your cart is empty{% endif %}
+        </p>
+        <a href="/customer/shopping-cart/" style="display:inline-block;padding:12px 30px;background:linear-gradient(135deg, #0080b3, #00d4ff);color:#000;border-radius:8px;text-decoration:none;font-weight:bold;transition:0.3s;box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);" onmouseover="this.style.background='linear-gradient(135deg, #00d4ff, #00ffff)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 255, 0.5)'" onmouseout="this.style.background='linear-gradient(135deg, #0080b3, #00d4ff)'; this.style.boxShadow='0 4px 15px rgba(0, 212, 255, 0.3)'">
+            View Shopping Cart →
+        </a>
+    </div>
+
+    <!-- MY ORDERS SECTION LINK -->
+    <div class="orders-section" style="text-align: center;">
+        <h2>📦 My Orders</h2>
+        <div style="margin-bottom:20px;">
+            <span style="background:#0ea5e9;color:white;padding:8px 12px;border-radius:6px;font-size:13px;">
+                Total Orders: <strong>{{ customer_orders.count }}</strong>
+            </span>
+        </div>
+        <p style="color:#94a3b8;margin-bottom:20px;">View and track all your orders in one place</p>
+        <a href="/customer/orders/" style="display:inline-block;padding:12px 30px;background:linear-gradient(135deg, #0080b3, #00d4ff);color:#000;border-radius:8px;text-decoration:none;font-weight:bold;transition:0.3s;box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);" onmouseover="this.style.background='linear-gradient(135deg, #00d4ff, #00ffff)'; this.style.boxShadow='0 6px 20px rgba(0, 255, 255, 0.5)'" onmouseout="this.style.background='linear-gradient(135deg, #0080b3, #00d4ff)'; this.style.boxShadow='0 4px 15px rgba(0, 212, 255, 0.3)'">
+            View All Orders →
+        </a>
+    </div>
+
+</div>
+
+<script>
+function scrollToCart(){
+    document.getElementById('cart-section').scrollIntoView({behavior:'smooth'});
+}
+
+// Payment Method Toggle
+document.getElementById('payment-method').addEventListener('change', function() {
+    const upiSection = document.getElementById('upi-section');
+    const bankSection = document.getElementById('bank-section');
+    
+    // Hide all sections first
+    upiSection.style.display = 'none';
+    bankSection.style.display = 'none';
+    
+    // Show selected section
+    if(this.value === 'upi') {
+        upiSection.style.display = 'block';
+    } else if(this.value === 'bank_transfer') {
+        bankSection.style.display = 'block';
+    }
+});
+
+// Validate UPI IDs match
+function validateUPI() {
+    const upiId = document.querySelector('input[name="upi_id"]').value;
+    const upiConfirm = document.querySelector('input[name="upi_id_confirm"]').value;
+    
+    if(upiId && upiConfirm && upiId !== upiConfirm) {
+        alert('❌ UPI IDs do not match! Please check and try again.');
+        return false;
+    }
+    return true;
+}
+
+// Validate Bank Account Numbers match
+function validateBankAccount() {
+    const accountNo = document.querySelector('input[name="bank_account_number"]').value;
+    const accountConfirm = document.querySelector('input[name="bank_account_number_confirm"]').value;
+    
+    if(accountNo && accountConfirm && accountNo !== accountConfirm) {
+        alert('❌ Account numbers do not match! Please check and try again.');
+        return false;
+    }
+    return true;
+}
+
+// Form submission validation
+document.querySelector('form[action="/order/place/"]').addEventListener('submit', function(e) {
+    const paymentMethod = document.getElementById('payment-method').value;
+    
+    if(paymentMethod === 'upi') {
+        if(!validateUPI()) {
+            e.preventDefault();
+        }
+    } else if(paymentMethod === 'bank_transfer') {
+        if(!validateBankAccount()) {
+            e.preventDefault();
+        }
+    }
+});
+
+
+</script>
+
+</body>
+</html>
