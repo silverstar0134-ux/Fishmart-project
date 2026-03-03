@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import customer_sign, Fish, Order, Category
+from .models import customer_sign, Fish, Order, Category 
 from django.contrib import messages
 from django.contrib import messages
 

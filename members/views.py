@@ -105,7 +105,7 @@ def loginview(request):
         password = request.POST.get("password")
 
         try:
-            user = customer_sign.objects.get(email=email, password=password, user_type='customer')
+            user = customer_sign.objects.get(email=email, password=password, user_type='customer')      
             request.session['user_id'] = user.id
             request.session['user_email'] = user.email
             request.session['user_type'] = user.user_type
@@ -291,7 +291,7 @@ def superadmin_edit_user(request, user_id):
             'user': current_user,
             'target_user': target_user,
         }
-        return render(request, 'superadmin_edit_user.html', context)
+        return render(request, 'superadmin_edit_user.html', context)   
     except customer_sign.DoesNotExist:
         return HttpResponse("User not found")
 
